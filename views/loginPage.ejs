@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            height: 100vh;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        #nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode #nav {
+            background-color: #1f1f1f;
+        }
+
+        #left h1 {
+            color: #007bff;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        body.dark-mode #left h1 {
+            color: #f5f5f5;
+        }
+
+        #right {
+            display: flex;
+            gap: 20px;
+        }
+
+        #right a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode #right a {
+            color: #4dabf7;
+        }
+
+        #loginDiv {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode #loginDiv {
+            background: #1e1e1e;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode input {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #dark-light-toggle {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode #dark-light-toggle {
+            background-color: #4dabf7;
+            color: #121212;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="nav">
+        <div id="left">
+            <h1>Khatabook</h1>
+        </div>
+        <div id="right">
+            <a href="/login">Home</a>
+            <a href="/create">Create New Account</a>
+        </div>
+    </div>
+
+    <div id="loginDiv">
+        <h2>Login to Your Account</h2>
+        <form action="/login" method="post">
+            <input type="email" placeholder="Email" required name="email">
+            <input type="password" placeholder="Password" required name="password">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <button id="dark-light-toggle">🌞</button>
+    
+
+    <script>
+        const toggleButton = document.getElementById('dark-light-toggle');
+        const body = document.body;
+
+        toggleButton.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            toggleButton.textContent = body.classList.contains('dark-mode') ? '🌙' : '🌞';
+        });
+    </script>
+</body>
+
+</html>

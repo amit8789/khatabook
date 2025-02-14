@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khatabook Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        #nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode #nav {
+            background-color: #1f1f1f;
+        }
+
+        #left h1 {
+            color: #007bff;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        body.dark-mode #left h1 {
+            color: #f5f5f5;
+        }
+
+        #right {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        #right h3 {
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        body.dark-mode #right h3 {
+            color: #4dabf7;
+        }
+
+        a {
+            display: inline-block;
+            position: relative;
+            text-decoration: none;
+            color: black;
+        }
+
+        #dark-light-toggle {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode #dark-light-toggle {
+            background-color: #4dabf7;
+            color: #121212;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .controls {
+            width: 100%;
+        }
+
+        .controls form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: transparent;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+            gap: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for select dropdowns and date picker */
+        .filter input[type="date"],
+        .filter select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background: #f9f9f9;
+            transition: border 0.3s ease-in-out;
+        }
+
+        .filter input[type="date"]:focus,
+        .filter select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* Radio buttons styling */
+        .filter label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background: #f1f1f1;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .filter label {
+            background: #333;
+            color: #f5f5f5;
+        }
+
+        .filter label:hover {
+            background: #e2e2e2;
+        }
+
+        /* Ensuring better spacing for radio inputs */
+        .filter input[type="radio"] {
+            accent-color: #007bff;
+            transform: scale(1.2);
+        }
+
+        /* Submit button styling */
+        .submit-button button {
+            padding: 10px 15px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .submit-button button:hover {
+            background: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .filter {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .submit-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+
+        /* Card container styling */
+        .hisaab-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Card styling */
+        .hisaab-card {
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .hisaab-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Card header styling */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* Encrypted and visibility buttons */
+        .encrypted {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        body.dark-mode .encrypted {
+            background-color: #4dabf7;
+        }
+
+        .toggle-visibility {
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        body.dark-mode .toggle-visibility {
+            background-color: #4dabf7;
+        }
+
+        /* Title and link */
+        .hisaab-card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        body.dark-mode .hisaab-card h3 {
+            color: #282626;
+        }
+
+        .hisaab-card p {
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        body.dark-mode .hisaab-card p {
+            color: #4dabf7;
+        }
+
+        /* Creation date styling */
+        .created-on {
+            font-size: 12px;
+            color: black;
+            display: block;
+            margin-top: 10px;
+        }
+
+        body.dark-mode .created-on {
+
+            color: black !important;
+        }
+
+        /* No data message */
+        .no-data {
+            position: absolute;
+
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        body.dark-mode .no-data {
+            color: #f5f5f5;
+        }
+
+        .no-data a {
+            display: inline-block;
+            position: relative;
+            text-decoration: none;
+            color: blue;
+        }
+        body.dark-mode a::after{
+            color: #0056b3;
+        }
+         a::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: black;
+            bottom: 0;
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+         a:hover::after {
+            transform: scaleX(1);
+        }
+        
+        body.dark-mode .no-data a {
+            color: #4dabf7;
+        }
+
+
+        #welcome-message {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px;
+        }
+
+        body.dark-mode #welcome-message {
+            color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="nav">
+        <div id="left">
+            <h1>Khatabook</h1>
+        </div>
+        <div id="right">
+            <a href="#">
+                <h3>Home</h3>
+            </a>
+            <a href="/create-hisaab">
+                <h3>Create New Hisaab</h3>
+            </a>
+            <a href="/logout">
+                <h3>Log Out</h3>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div id="welcome-message"></div>
+        <div class="controls">
+            <form method="GET" action="/dashboard">
+                <div class="filter">
+                    <div>
+                        <input type="date" name="filterDate" placeholder="By Date" value="<%= filterDate %>">
+                    </div>
+                    <select name="sortOrder">
+                        <option value="newest" <%=sortOrder==="newest" ? "selected" : "" %>>Newest First</option>
+                        <option value="oldest" <%=sortOrder==="oldest" ? "selected" : "" %>>Oldest First</option>
+                    </select>
+
+                    <label>
+                        <input type="radio" name="encryptionFilter" value="all" <%=encryptionFilter==="all" ? "checked"
+                            : "" %>> Show All
+                    </label>
+                    <label>
+                        <input type="radio" name="encryptionFilter" value="encrypted" <%=encryptionFilter==="encrypted"
+                            ? "checked" : "" %>> Show Only Encrypted
+                    </label>
+                    <label>
+                        <input type="radio" name="encryptionFilter" value="non-encrypted"
+                            <%=encryptionFilter==="non-encrypted" ? "checked" : "" %>> Show Only Non-Encrypted
+                    </label>
+
+                    <div class="submit-button">
+                        <button type="submit">Apply Filters</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="hisaab-container">
+            <% if (hisaabs && hisaabs.length> 0) { %>
+                <% hisaabs.forEach(hisaab=> { %>
+                    <div class="hisaab-card">
+                        <div class="card-header">
+                            <% if (hisaab.encrypt) { %>
+                                <button class="encrypted">🔒 Encrypted</button>
+                                <% } else { %>
+                                    <button class="toggle-visibility">👁️ Available</button>
+                                    <% } %>
+
+                                    <a href="/delete-hisaab/<%= hisaab._id %>" class="delete-icon">🗑️</a>
+                        </div>
+                                
+                        <h3>
+                            <%= hisaab.title %>
+                        </h3>
+                        <p><a href="/view-hisaab/<%= hisaab._id %>" class="view-link">View Hisaab</a>
+                            <!-- Link to the specific Hisaab --></p>
+                        <span>Created On: <%= new Date(hisaab.createdOn).toLocaleDateString() %></span>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <div class="no-data">
+                                <h2>No Hisaabs found. Create a new one!</h2>
+                                <p><a href="/create-hisaab">Create a new Hisaab</a></p>
+                            </div>
+                            <% } %>
+        </div>
+        <div id="dark-light-button">
+            <button id="dark-light-toggle">🌞</button>
+        </div>
+    </div>
+                
+    <script>
+        const toggleButton = document.getElementById('dark-light-toggle');
+        const body = document.body;
+
+        toggleButton.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+
+            // Update button icon
+            if (body.classList.contains('dark-mode')) {
+                toggleButton.textContent = '🌙';
+            } else {
+                toggleButton.textContent = '🌞';
+            }
+        });
+        function getGreeting() {
+            const hours = new Date().getHours();
+            if (hours < 12) return "Good Morning";
+            else if (hours < 18) return "Good Afternoon";
+            else return "Good Evening";
+        }
+        document.getElementById("welcome-message").innerText = `${getGreeting()}, <%= username %>!`;
+
+
+
+        const deleteIcons = document.querySelectorAll('.delete-icon');
+
+// Loop over each delete icon and attach a click event listener
+deleteIcons.forEach(function(deleteIcon) {
+    deleteIcon.onclick = function(event) {
+        // Prompt the user for confirmation
+        let confirmation = confirm('Are you sure you want to delete this Hisaab?');
+
+        // If the user clicks "OK", proceed with deletion
+        if (confirmation) {
+            alert('Hisaab deleted successfully.');
+            // Here you can write code to actually delete the Hisaab (e.g., make a server request)
+        } else {
+            // If the user clicks "Cancel", cancel the deletion
+            event.preventDefault(); // Prevents the link from executing
+            alert('Deletion cancelled.');
+        }
+    };
+});
+    </script>
+</body>
+
+</html>
