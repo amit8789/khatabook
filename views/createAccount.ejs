@@ -225,6 +225,9 @@
                 event.preventDefault();
                 errorMessage.textContent = "Passwords do not match!";
             }
+            if(error){
+                errorMessage.textContent="user already exists";
+            }
         });
 
         const toggleButton = document.getElementById('dark-light-toggle');

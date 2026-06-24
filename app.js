@@ -3,7 +3,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const mongooseconnection = require("./config/db");
 const session = require("express-session");
-const flash = require("express-flash");
+// const flash = require("express-flash");
+const flash = require("connect-flash");
 
 const authRoutes = require("./routes/authRoutes");
 const hisaabRoutes = require("./routes/hisaabRoutes");
@@ -31,5 +32,10 @@ app.use("/", dashboardRoutes);
 app.use("/", hisaabRoutes);
 app.use("/", deleteHisaabRoutes);
 
+// Middleware to pass flash messages to all views
+app.use((req, res, next) => {
+    res.locals.messages = req.flash('error')[0];
+    next();
+});
 // Start Server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

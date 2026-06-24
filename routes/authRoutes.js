@@ -6,6 +6,10 @@ const userModel = require("../models/user");
 const router = express.Router();
 const SECRET_KEY = process.env.SECRET_KEY;
 
+router.get("/",(req,res)=>{
+    res.redirect("/login")
+})
+
 // Create Account
 router.get("/create", (req, res) => {
     res.render("createAccount");
@@ -13,7 +17,14 @@ router.get("/create", (req, res) => {
 
 router.post("/create", async (req, res, next) => {
     const { name, email, password, confirmPassword } = req.body;
+    
+    const user = await userModel.findOne({ email });
+    if (user) {
+        req.flash("error", "user already exist.");
+        return res.redirect("/create");
+    }
 
+   
     if (password !== confirmPassword) {
         req.flash("error", "Passwords do not match.");
         return res.redirect("/create");

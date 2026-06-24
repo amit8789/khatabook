@@ -7,6 +7,7 @@ const authenticateJWT = (req, res, next) => {
 
     if (!token) {
         req.flash("error", "You must be logged in.");
+        console.log("you must be logged in");
         return res.redirect("/login");
     }
 
